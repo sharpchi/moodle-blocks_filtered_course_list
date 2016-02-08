@@ -332,7 +332,7 @@ class block_filtered_course_list extends block_base {
         global $CFG;
         $linkcss = $course->visible ? "fcl-course-link" : "fcl-course-link dimmed";
         $html = html_writer::tag('li',
-            html_writer::tag('a', format_string($course->fullname),
+            html_writer::tag('a', format_string(get_course_display_name_for_list($course), true, $course->id),
             array('href' => $CFG->wwwroot . '/course/view.php?id=' . $course->id,
                 'title' => format_string($course->shortname), 'class' => $linkcss))
         );
