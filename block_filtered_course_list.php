@@ -103,14 +103,19 @@ class block_filtered_course_list extends block_base {
         $this->content->text   = '';
         $this->content->footer = '';
         $this->context = context_system::instance();
-
-        $this->mycourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
-
-        // Obtain values from our config settings.
-
+		
+		// Obtain values from our config settings.
         $this->fclconfig = get_config('block_filtered_course_list');
         $this->_calculate_settings();
 
+		
+		if (!($sort = $this->fclconfig->sorttype)) {
+			$sort = 'shortname';
+		}
+		$sortdirection = $this->fclconfig->sortdirection;
+        $this->mycourses = enrol_get_my_courses(null, 'visible DESC, ' . $sort . ' ' . $sortdirection);
+
+        
         /* Call accordion YUI module */
         if ($this->fclconfig->collapsible == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->page) {
             $this->page->requires->yui_module('moodle-block_filtered_course_list-accordion',

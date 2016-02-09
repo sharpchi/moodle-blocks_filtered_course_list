@@ -69,6 +69,27 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configselect('block_filtered_course_list/filtertype',
         get_string('filtertype', 'block_filtered_course_list'),
         get_string('configfiltertype', 'block_filtered_course_list'), 'shortname', $filters));
+		
+	$sorts = array(
+        'shortname' => get_string('sortshortname', 'block_filtered_course_list'),
+        'fullname' => get_string('sortfullname', 'block_filtered_course_list'),
+		'idnumber' => get_string('sortidnumber', 'block_filtered_course_list'),
+		'id' => get_string('sortid', 'block_filtered_course_list'),
+		'sortorder' => get_string('sortorder', 'block_filtered_course_list')
+    );
+
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/sorttype',
+        get_string('sorttype', 'block_filtered_course_list'),
+        get_string('configsorttype', 'block_filtered_course_list'), 'shortname', $sorts));
+		
+	$sortdirection = array(
+        'ASC' => get_string('sortasc', 'block_filtered_course_list'),
+        'DESC' => get_string('sortdesc', 'block_filtered_course_list')
+    );
+
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/sortdirection',
+        get_string('sortdirection', 'block_filtered_course_list'),
+        get_string('configsortdirection', 'block_filtered_course_list'), 'ASC', $sortdirection));
 
     $settings->add(new admin_setting_heading('block_filtered_course_list/shortname',
         get_string('shortnamesettings', 'block_filtered_course_list'),
