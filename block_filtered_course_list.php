@@ -102,24 +102,18 @@ class block_filtered_course_list extends block_base {
         $this->content->text   = '';
         $this->content->footer = '';
         $this->context = context_system::instance();
-		
+
 		// Obtain values from our config settings.
         $this->fclconfig = get_config('block_filtered_course_list');
         $this->_calculate_settings();
 
-		
+
 		if (!($sort = $this->fclconfig->sorttype)) {
 			$sort = 'shortname';
 		}
 		$sortdirection = $this->fclconfig->sortdirection;
         $this->mycourses = enrol_get_my_courses(null, 'visible DESC, ' . $sort . ' ' . $sortdirection);
 
-        
-        /* Call accordion YUI module */
-        if ($this->fclconfig->collapsible == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->page) {
-            $this->page->requires->yui_module('moodle-block_filtered_course_list-accordion',
-                'M.block_filtered_course_list.accordion.init', array());
-        }
 
         $this->_calculate_usertype();
 
@@ -231,6 +225,9 @@ class block_filtered_course_list extends block_base {
             $sectioncount = 1;
             $id = $this->instance->id;
 
+            $tabs = '';
+            $tab_content = '';
+
             foreach ($filteredcourses as $section => $courslist) {
                 if (count($courslist) == 0) {
                     continue;
@@ -240,24 +237,27 @@ class block_filtered_course_list extends block_base {
                 $ariahidden = 'true';
                 if ($this->fclconfig->collapsible && array_key_exists($section, $this->labelexpanded)) {
                     if ($this->labelexpanded[$section] == 1) {
-                        $initialstate = 'expanded';
+                        $initialstate = 'active';
                         $ariaexpanded = 'true';
                         $ariahidden = 'false';
                     }
                 }
                 $sectionatts = array(
                     'id'            => "fcl_{$id}_tab{$sectioncount}",
-                    'class'         => "course-section tab{$sectioncount} $initialstate",
+                    'class'         => "course-section tab{$sectioncount}",
                     'role'          => 'tab',
                     'aria-controls' => "fcl_{$id}_tabpanel{$sectioncount}",
                     'aria-expanded' => "$ariaexpanded",
                     'aria-selected' => 'false',
+                    'href'          => "#fcl_{$id}_tabpanel{$sectioncount}",
+                    'data-toggle'   => 'tab'
                 );
-                $this->content->text .= html_writer::tag('div', $section, $sectionatts);
-
+                $tabs .= html_writer::tag('li',
+                            html_writer::tag('a', $section, $sectionatts),
+                            array('class' => $initialstate));
                 $ulatts = array(
                     'id'              => "fcl_{$id}_tabpanel{$sectioncount}",
-                    'class'           => "$this->collapsibleclass list tabpanel{$sectioncount}",
+                    'class'           => "$this->collapsibleclass list tabpanel{$sectioncount} tab-pane {$initialstate}",
                     'role'            => "tabpanel",
                     'aria-labelledby' => "fcl_{$id}_tab{$sectioncount}",
                     'aria-hidden'     => "$ariahidden",
@@ -265,11 +265,15 @@ class block_filtered_course_list extends block_base {
                 $listitems = '';
                 foreach ($courslist as $course) {
                     $listitems .= $this->_print_single_course($course);
+
                 }
-                $this->content->text .= html_writer::tag('ul', $listitems, $ulatts);
+                $tab_content .= html_writer::tag('ul', $listitems, $ulatts);
 
                 ++$sectioncount;
             }
+
+            $this->content->text = html_writer::tag('ul', $tabs, array('class' => 'nav nav-tabs'));
+            $this->content->text .= html_writer::tag('div', $tab_content, array('class' => 'tab-content'));
 
             $this->_print_allcourseslink();
         }
@@ -336,7 +340,7 @@ class block_filtered_course_list extends block_base {
         global $CFG;
         $linkcss = $course->visible ? "fcl-course-link" : "fcl-course-link dimmed";
         $html = html_writer::tag('li',
-            html_writer::tag('a', format_string(get_course_display_name_for_list($course), true, $course->id),
+            html_writer::tag('a', get_course_display_name_for_list($course),
             array('href' => $CFG->wwwroot . '/course/view.php?id=' . $course->id,
                 'title' => format_string($course->shortname), 'class' => $linkcss))
         );
