@@ -82,3 +82,5 @@ $string['shortnamesettings']        = 'Shortname settings';
 $string['shortnamesettingsinfo']    = 'These settings apply only when using the shortname filter type.';
 $string['top']                      = 'Top';
 $string['useregex']                 = 'Use regex';
+$string['updated']                  = 'This course has been updated since your last visit';
+$string['neverseen']                = 'You have never viewed this course';

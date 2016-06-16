@@ -112,7 +112,11 @@ class block_filtered_course_list extends block_base {
 			$sort = 'shortname';
 		}
 		$sortdirection = $this->fclconfig->sortdirection;
-        $this->mycourses = enrol_get_my_courses(null, 'visible DESC, ' . $sort . ' ' . $sortdirection);
+        $fields = array('id', 'category', 'sortorder',
+                            'shortname', 'fullname', 'idnumber',
+                            'startdate', 'visible',
+                            'groupmode', 'groupmodeforce', 'cacherev', 'timemodified', 'updated');
+        $this->mycourses = enrol_get_my_courses($fields, 'visible DESC, ' . $sort . ' ' . $sortdirection);
 
 
         $this->_calculate_usertype();
@@ -274,7 +278,6 @@ class block_filtered_course_list extends block_base {
 
             $this->content->text = html_writer::tag('ul', $tabs, array('class' => 'nav nav-tabs'));
             $this->content->text .= html_writer::tag('div', $tab_content, array('class' => 'tab-content'));
-
             $this->_print_allcourseslink();
         }
     }
@@ -337,9 +340,24 @@ class block_filtered_course_list extends block_base {
      * @return string HTML to display a link to a course
      */
     private function _print_single_course($course) {
-        global $CFG;
+        global $CFG, $USER;
         $linkcss = $course->visible ? "fcl-course-link" : "fcl-course-link dimmed";
+        $new = '';
+        if (isset($USER->lastcourseaccess[$course->id])) {
+            if (strtotime($course->updated) > $USER->lastcourseaccess[$course->id]) {
+                if (! isset($USER->currentcourseaccess[$course->id])) {
+                    $new = html_writer::tag('i', '', array('class' => 'fa fa-star green', 'title' => get_string('updated', 'block_filtered_course_list')));
+                }
+
+            }
+        } else {
+            if (!isset($USER->currentcourseaccess[$course->id])) {
+                $new = html_writer::tag('i', '', array('class' => 'fa fa-asterisk red', 'title' => get_string('neverseen', 'block_filtered_course_list')));
+            }
+
+        }
         $html = html_writer::tag('li',
+            $new . ' ' .
             html_writer::tag('a', get_course_display_name_for_list($course),
             array('href' => $CFG->wwwroot . '/course/view.php?id=' . $course->id,
                 'title' => format_string($course->shortname), 'class' => $linkcss))
