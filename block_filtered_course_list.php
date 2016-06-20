@@ -115,7 +115,7 @@ class block_filtered_course_list extends block_base {
         $fields = array('id', 'category', 'sortorder',
                             'shortname', 'fullname', 'idnumber',
                             'startdate', 'visible',
-                            'groupmode', 'groupmodeforce', 'cacherev', 'timemodified', 'updated');
+                            'groupmode', 'groupmodeforce', 'cacherev', 'timemodified');
         $this->mycourses = enrol_get_my_courses($fields, 'visible DESC, ' . $sort . ' ' . $sortdirection);
 
 
@@ -342,13 +342,11 @@ class block_filtered_course_list extends block_base {
      */
     private function _print_single_course($course) {
         global $CFG, $USER;
-
         $dimmed = $course->visible ? '' : ' dimmed';
         $linkcss = "fcl-course-link" . $dimmed;
-
         $new = '';
         if (isset($USER->lastcourseaccess[$course->id])) {
-            if (strtotime($course->updated) > $USER->lastcourseaccess[$course->id]) {
+            if ($course->timemodified > $USER->lastcourseaccess[$course->id]) {
                 if (! isset($USER->currentcourseaccess[$course->id])) {
                     $new = html_writer::tag('i', '', array('class' => 'fa fa-star green' . $dimmed,
                                                             'title' => get_string('updated', 'block_filtered_course_list'),
