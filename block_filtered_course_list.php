@@ -205,7 +205,8 @@ class block_filtered_course_list extends block_base {
      * Build a user-specific Filtered course list block
      */
     private function _process_filtered_list() {
-
+        GLOBAL $PAGE;
+        //$PAGE->requires->js_call_amd('block_filtered_course_list/filtered_course_list', 'tooltips');
         if ($this->mycourses) {
             switch ($this->fclconfig->filtertype) {
                 case 'shortname':
@@ -341,18 +342,30 @@ class block_filtered_course_list extends block_base {
      */
     private function _print_single_course($course) {
         global $CFG, $USER;
-        $linkcss = $course->visible ? "fcl-course-link" : "fcl-course-link dimmed";
+
+        $dimmed = $course->visible ? '' : ' dimmed';
+        $linkcss = "fcl-course-link" . $dimmed;
+
         $new = '';
         if (isset($USER->lastcourseaccess[$course->id])) {
             if (strtotime($course->updated) > $USER->lastcourseaccess[$course->id]) {
                 if (! isset($USER->currentcourseaccess[$course->id])) {
-                    $new = html_writer::tag('i', '', array('class' => 'fa fa-star green', 'title' => get_string('updated', 'block_filtered_course_list')));
+                    $new = html_writer::tag('i', '', array('class' => 'fa fa-star green' . $dimmed,
+                                                            'title' => get_string('updated', 'block_filtered_course_list'),
+                                                            'data-toggle' => "tooltip",
+                                                            'data-content' => get_string('updated', 'block_filtered_course_list'),
+                                                            'href' => '#'
+                                                            ));
                 }
 
             }
         } else {
             if (!isset($USER->currentcourseaccess[$course->id])) {
-                $new = html_writer::tag('i', '', array('class' => 'fa fa-asterisk red', 'title' => get_string('neverseen', 'block_filtered_course_list')));
+                $new = html_writer::tag('i', '', array( 'class' => 'fa fa-asterisk red' . $dimmed,
+                                                        'title' => get_string('neverseen', 'block_filtered_course_list'),
+                                                        'data-toggle' => "tooltip",
+                                                        'data-content' => get_string('neverseen', 'block_filtered_course_list'),
+                                                        'href' => '#'));
             }
 
         }

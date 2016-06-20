@@ -43,3 +43,4 @@
 .block_filtered_course_list .course-section.expanded {
     background: url([[pix:t/expanded]]) no-repeat 0px 2px transparent;
 }
+.block_filtered_course_list .green.dimmed, .block_filtered_course_list .red.dimmed { color: #999999 !important; }
