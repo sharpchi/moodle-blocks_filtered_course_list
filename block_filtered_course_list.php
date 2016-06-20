@@ -439,7 +439,7 @@ class block_filtered_course_list extends block_base {
             $satisfies = (core_text::strpos($coursename, $teststring) !== false) ?: false;
         } else {
             $teststring = str_replace('`', '', $teststring);
-            $satisfies = (preg_match("`$teststring`", $coursename) == 1) ?: false;
+            $satisfies = (preg_match("`$teststring`i", $coursename) == 1) ?: false;
         }
         return $satisfies;
     }
