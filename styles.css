@@ -44,3 +44,7 @@
     background: url([[pix:t/expanded]]) no-repeat 0px 2px transparent;
 }
 .block_filtered_course_list .green.dimmed, .block_filtered_course_list .red.dimmed { color: #999999 !important; }
+
+.block_filtered_course_list .tab-content li i {
+    margin-left: -16px;
+}
