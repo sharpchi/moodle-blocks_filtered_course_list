@@ -280,6 +280,19 @@ class block_filtered_course_list extends block_base {
             $this->content->text = html_writer::tag('ul', $tabs, array('class' => 'nav nav-tabs'));
             $this->content->text .= html_writer::tag('div', $tab_content, array('class' => 'tab-content'));
             $this->_print_allcourseslink();
+            if ($this->fclconfig->showstatus) {
+                $this->content->text .= html_writer::tag('div', get_string('key', 'block_filtered_course_list'), array('class' => 'bold'));
+                $this->content->text .= html_writer::tag('ul',
+                    html_writer::tag('li',
+                        html_writer::tag('i', '', array('class' => 'fa fa-star green')) . ' = ' . get_string('updated', 'block_filtered_course_list')
+
+                    ) .
+                    html_writer::tag('li',
+                        html_writer::tag('i', '', array('class' => 'fa fa-asterisk red')) . ' = ' . get_string('neverseen', 'block_filtered_course_list')
+                    ),
+                    array('class' => 'list-unstyled unstyled')
+                );
+            }
         }
     }
 
@@ -345,28 +358,31 @@ class block_filtered_course_list extends block_base {
         $dimmed = $course->visible ? '' : ' dimmed';
         $linkcss = "fcl-course-link" . $dimmed;
         $new = '';
-        if (isset($USER->lastcourseaccess[$course->id])) {
-            if ($course->timemodified > $USER->lastcourseaccess[$course->id]) {
-                if (! isset($USER->currentcourseaccess[$course->id])) {
-                    $new = html_writer::tag('i', '', array('class' => 'fa fa-star green' . $dimmed,
-                                                            'title' => get_string('updated', 'block_filtered_course_list'),
+        if ($this->fclconfig->showstatus) {
+            if (isset($USER->lastcourseaccess[$course->id])) {
+                if ($course->timemodified > $USER->lastcourseaccess[$course->id]) {
+                    if (! isset($USER->currentcourseaccess[$course->id])) {
+                        $new = html_writer::tag('i', '', array('class' => 'fa fa-star green' . $dimmed,
+                                                                'title' => get_string('updated', 'block_filtered_course_list'),
+                                                                'data-toggle' => "tooltip",
+                                                                'data-content' => get_string('updated', 'block_filtered_course_list'),
+                                                                'href' => '#'
+                                                                ));
+                    }
+
+                }
+            } else {
+                if (!isset($USER->currentcourseaccess[$course->id])) {
+                    $new = html_writer::tag('i', '', array( 'class' => 'fa fa-asterisk red' . $dimmed,
+                                                            'title' => get_string('neverseen', 'block_filtered_course_list'),
                                                             'data-toggle' => "tooltip",
-                                                            'data-content' => get_string('updated', 'block_filtered_course_list'),
-                                                            'href' => '#'
-                                                            ));
+                                                            'data-content' => get_string('neverseen', 'block_filtered_course_list'),
+                                                            'href' => '#'));
                 }
 
             }
-        } else {
-            if (!isset($USER->currentcourseaccess[$course->id])) {
-                $new = html_writer::tag('i', '', array( 'class' => 'fa fa-asterisk red' . $dimmed,
-                                                        'title' => get_string('neverseen', 'block_filtered_course_list'),
-                                                        'data-toggle' => "tooltip",
-                                                        'data-content' => get_string('neverseen', 'block_filtered_course_list'),
-                                                        'href' => '#'));
-            }
-
         }
+
         $html = html_writer::tag('li',
             $new . ' ' .
             html_writer::tag('a', get_course_display_name_for_list($course),

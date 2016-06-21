@@ -84,3 +84,6 @@ $string['top']                      = 'Top';
 $string['useregex']                 = 'Use regex';
 $string['updated']                  = 'This course has been updated since your last visit';
 $string['neverseen']                = 'You have never viewed this course';
+$string['showstatus']               = 'Show course view status';
+$string['configshowstatus']         = 'This will show a star or asterisk to show that a user has not view the course since last update or never, respectively.';
+$string['key']                      = 'Key';

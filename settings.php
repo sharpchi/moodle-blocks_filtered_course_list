@@ -61,6 +61,10 @@ if ($ADMIN->fulltree) {
         get_string('configadminview', 'block_filtered_course_list'),
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL, $adminviews));
 
+    $settings->add(new admin_setting_configcheckbox('block_filtered_course_list/showstatus',
+        get_string('showstatus', 'block_filtered_course_list'),
+        get_string('configshowstatus', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_TRUE));
+
     $filters = array(
         'shortname' => get_string('filtershortname', 'block_filtered_course_list'),
         'categories' => get_string('filtercategories', 'block_filtered_course_list')
@@ -69,7 +73,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configselect('block_filtered_course_list/filtertype',
         get_string('filtertype', 'block_filtered_course_list'),
         get_string('configfiltertype', 'block_filtered_course_list'), 'shortname', $filters));
-		
+
 	$sorts = array(
         'shortname' => get_string('sortshortname', 'block_filtered_course_list'),
         'fullname' => get_string('sortfullname', 'block_filtered_course_list'),
@@ -81,7 +85,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configselect('block_filtered_course_list/sorttype',
         get_string('sorttype', 'block_filtered_course_list'),
         get_string('configsorttype', 'block_filtered_course_list'), 'shortname', $sorts));
-		
+
 	$sortdirection = array(
         'ASC' => get_string('sortasc', 'block_filtered_course_list'),
         'DESC' => get_string('sortdesc', 'block_filtered_course_list')
