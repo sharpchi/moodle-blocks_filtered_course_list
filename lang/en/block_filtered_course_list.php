@@ -29,24 +29,6 @@ $string['filtered_course_list:myaddinstance'] = 'Add a new Filtered course list 
 $string['managerview']              = 'Manager view';
 $string['allcourses']               = 'A manager sees all courses';
 $string['blockname']                = 'Filtered course list';
-<<<<<<< HEAD
-$string['categories']               = 'Current category';
-$string['categorysettings']         = 'Category settings';
-$string['categorysettingsinfo']     = 'These settings apply only when using the category filter type.';
-$string['collapsible']              = 'Collapsible sections';
-$string['configadminview']          = 'What should the admin see in the course list block? Note that admins who are not enrolled in any courses will still see the generic list.';
-$string['configcollapsible']        = 'Should the course groupings be collapsible?';
-$string['configcategories']         = 'Select the category you want to display as current.';
-$string['configcurrentshortname']   = 'Enter the string that designates the current term. <br>This must be part of the course shortname.';
-$string['configcustomlabel']        = 'Enter a custom section title under which to organize courses. <br />[No HTML.]';
-$string['configcustomshortname']    = 'Enter a shortname string match for the corresponding custom label.';
-$string['configexpanded']           = 'Check to expand this rubric by default when using collapsible rubrics.';
-$string['configfiltertype']         = 'Select the type of course filter you would like to use.';
-$string['configsorttype']			= 'Select the field to sort your course lists on.';
-$string['configsortdirection']		= 'Select whether the sort type should be sorted Ascendingly or Descendingly.';
-$string['configfutureshortname']    = 'Enter the string that designates the next term. <br>This must be part of the course shortname.';
-$string['confighideallcourseslink'] = 'Hide "All courses" link at the bottom of the block. <br>Link hiding does not affect Admin\'s view';
-=======
 $string['completedcourses']         = 'Completed courses';
 $string['configmanagerview']        = 'What should a manager see in the course list block? Note that managers who are not enrolled in any courses will still see the generic list.';
 $string['configfilters']            = <<<EOF
@@ -65,37 +47,12 @@ Notes:
 <br />Additional details available at <a href='https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list#user-content-configuration' target='_blank' title='Additional documentation'>https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list#user-content-configuration</a>
 EOF;
 $string['confighideallcourseslink'] = 'Hide "All courses" link at the bottom of the block. <br>Link hiding does not affect a manager\'s view';
->>>>>>> upstream/master
 $string['confighidefromguests']     = 'Hide the block from guests and anonymous visitors.';
 $string['confighideothercourses']   = 'Hide "Other courses" in the block.';
 $string['configmaxallcourse']       = 'On a site with only one category, managers and guests will see all courses, <br />but above this number they will see a category link instead. <br />[Choose an integer between 0 and 999.]';
 $string['configprimarysort']        = 'Within a rubric courses will be sorted by this field. Choose "Sort order" to display courses in the same order as seen in the course management interface.';
 $string['configsecondarysort']      = 'Within a rubric courses will secondarily be sorted by this field.';
 $string['configtitle']              = 'Block title';
-<<<<<<< HEAD
-$string['configuseregex']           = 'Check this box if you want to use regex for shortname matches. Note that backticks (`) will be stripped from regex searches and that regex matching is case sensitive, unlike non-regex matching. For details about regex syntax please see <a href="http://php.net/manual/en/reference.pcre.pattern.syntax.php" target="_blank">http://php.net/manual/en/reference.pcre.pattern.syntax.php</a>';
-$string['currentcourses']           = 'Current courses';
-$string['currentshortname']         = 'Current shortname';
-$string['customlabel']              = 'Custom label';
-$string['customshortname']          = 'Custom shortname';
-$string['expanded']                 = 'Expand by default';
-$string['filtercategories']         = 'Category';
-$string['filtercustom']             = 'Custom';
-$string['filtershortname']          = 'Shortname';
-$string['filtertype']               = 'Filter type';
-$string['sortshortname']			= 'Shortname';
-$string['sortfullname']				= 'Fullname';
-$string['sortidnumber']				= 'IDNumber';
-$string['sortid']					= 'ID';
-$string['sortorder']				= 'SortOrder';
-$string['sorttype']					= 'Sort type';
-$string['sortdirection']			= 'Sort direction';
-$string['sortasc']					= 'Ascending';
-$string['sortdesc']					= 'Descending';
-$string['futurecourses']            = 'Future courses';
-$string['futureshortname']          = 'Future shortname';
-$string['generalsettings']          = 'General settings';
-=======
 $string['courses']                  = 'Courses';
 $string['defaultfilters']           = <<<EOF
 category | collapsed | 0 (top level) | 0 (all descendants)
@@ -108,7 +65,6 @@ EXAMPLE: completion | exp | (In)complete | (in)complete
 EOF;
 $string['filters']                  = 'Filter configuration';
 $string['filters_help']             = $string['configfilters'];
->>>>>>> upstream/master
 $string['hideallcourseslink']       = 'Hide "All courses" link';
 $string['hideothercourses']         = 'Hide other courses';
 $string['hidefromguests']           = 'Hide from guests';
@@ -121,12 +77,3 @@ $string['primaryvector']            = 'Primary sort vector';
 $string['secondarysort']            = 'Secondary sort';
 $string['secondaryvector']          = 'Secondary sort vector';
 $string['top']                      = 'Top';
-<<<<<<< HEAD
-$string['useregex']                 = 'Use regex';
-$string['updated']                  = 'This course has been updated since your last visit';
-$string['neverseen']                = 'You have never viewed this course';
-$string['showstatus']               = 'Show course view status';
-$string['configshowstatus']         = 'This will show a star or asterisk to show that a user has not view the course since last update or never, respectively.';
-$string['key']                      = 'Key';
-=======
->>>>>>> upstream/master
