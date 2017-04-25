@@ -18,7 +18,7 @@
  * This file defines the admin settings available for the Filtered course list block.
  *
  * @package    block_filtered_course_list
- * @copyright  2015 CLAMP
+ * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,8 +28,10 @@ require_once(dirname(__FILE__) . '/locallib.php');
 
 if ($ADMIN->fulltree) {
 
-    $settings->add(new admin_setting_heading('block_filtered_course_list/general',
-        get_string('generalsettings', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
+    $settings->add(new admin_setting_configtextarea('block_filtered_course_list/filters',
+        get_string('filters', 'block_filtered_course_list'),
+        get_string('configfilters', 'block_filtered_course_list'),
+        get_string('defaultfilters', 'block_filtered_course_list'), PARAM_RAW));
 
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list/hideallcourseslink',
         get_string('hideallcourseslink', 'block_filtered_course_list'),
@@ -47,15 +49,12 @@ if ($ADMIN->fulltree) {
         get_string('maxallcourse', 'block_filtered_course_list'),
         get_string('configmaxallcourse', 'block_filtered_course_list'), 10, '/^\d{1,3}$/', 3));
 
-    $settings->add(new admin_setting_configcheckbox('block_filtered_course_list/collapsible',
-        get_string('collapsible', 'block_filtered_course_list'),
-        get_string('configcollapsible', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_TRUE));
-
-    $adminviews = array(
+    $managerviews = array(
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL => get_string('allcourses', 'block_filtered_course_list'),
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN => get_string('owncourses', 'block_filtered_course_list')
     );
 
+<<<<<<< HEAD
     $settings->add(new admin_setting_configselect('block_filtered_course_list/adminview',
         get_string('adminview', 'block_filtered_course_list'),
         get_string('configadminview', 'block_filtered_course_list'),
@@ -149,24 +148,42 @@ if ($ADMIN->fulltree) {
         $settings->add(new admin_setting_configtext("block_filtered_course_list/customlabel$i",
             get_string('customlabel', 'block_filtered_course_list') . " $i",
             get_string('configcustomlabel', 'block_filtered_course_list'), '', PARAM_TEXT));
+=======
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/managerview',
+        get_string('managerview', 'block_filtered_course_list'),
+        get_string('configmanagerview', 'block_filtered_course_list'),
+        BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL, $managerviews));
 
-        $settings->add(new admin_setting_configtext("block_filtered_course_list/customshortname$i",
-            get_string('customshortname', 'block_filtered_course_list') . " $i",
-            get_string('configcustomshortname', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
+    $sortablefields = array(
+        'fullname'  => 'Full name',
+        'shortname' => 'Short name',
+        'sortorder' => 'Sort order',
+        'idnumber'  => 'ID number',
+        'startdate' => 'Start date',
+        'none'      => 'None',
+    );
 
-        $settings->add(new admin_setting_configcheckbox("block_filtered_course_list/labelexpanded$i",
-            get_string('expanded', 'block_filtered_course_list'),
-            get_string('configexpanded', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_FALSE));
-    }
+    $sortvectors = array(
+        'ASC'  => 'Ascending',
+        'DESC' => 'Descending',
+    );
+>>>>>>> upstream/master
 
-    $settings->add(new admin_setting_heading('block_filtered_course_list/catx',
-        get_string('categorysettings', 'block_filtered_course_list'),
-        get_string('categorysettingsinfo', 'block_filtered_course_list')));
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/primarysort',
+        get_string('primarysort', 'block_filtered_course_list'),
+        get_string('configprimarysort', 'block_filtered_course_list'),
+        'fullname', $sortablefields));
 
-    $categories = coursecat::make_categories_list();
-    $top = array(BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY  => get_string('top', 'block_filtered_course_list'));
-    $categories = $top + $categories;
-    $settings->add(new admin_setting_configselect('block_filtered_course_list/categories',
-        get_string('categories', 'block_filtered_course_list'),
-        get_string('configcategories', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY, $categories));
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/primaryvector',
+        get_string('primaryvector', 'block_filtered_course_list'), '',
+        'ASC', $sortvectors));
+
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/secondarysort',
+        get_string('secondarysort', 'block_filtered_course_list'),
+        get_string('configsecondarysort', 'block_filtered_course_list'),
+        'none', $sortablefields));
+
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/secondaryvector',
+        get_string('secondaryvector', 'block_filtered_course_list'), '',
+        'ASC', $sortvectors));
 }
