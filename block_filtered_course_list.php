@@ -132,14 +132,15 @@ class block_filtered_course_list extends block_base {
                 $sortstring .= ", " . $sortsetting[0] . " " . $sortsetting[1];
             }
         }
-
-        $this->mycourses = enrol_get_my_courses(null, "$sortstring");
+        $fields = ['id', 'category', 'sortorder', 'shortname',
+                    'fullname', 'idnumber', 'startdate', 'visible',
+                    'groupmode', 'groupmodeforce', 'cacherev', 'timemodified'];
+        $this->mycourses = enrol_get_my_courses($fields, "visible DESC, {$sortstring}");
 
         /* Call accordion AMD module */
         $params = array(
             'blockid' => 'inst' . $this->instance->id,
         );
-        $PAGE->requires->js_call_amd('block_filtered_course_list/accordion', 'init', array($params));
 
         $this->_calculate_usertype();
         $this->liststyle = $this->_set_liststyle();
@@ -149,9 +150,11 @@ class block_filtered_course_list extends block_base {
             $this->$process();
         }
 
-        if (is_object($this->content) && $this->content->text != '') {
-            $atts = array('role' => 'tablist', 'aria-multiselectable' => 'true');
-            $this->content->text = html_writer::div($this->content->text, 'tablist', $atts);
+        if (is_object($this->content)) {
+            $atts = array('role' => 'tablist', 'aria-multiselectable' => 'false', 'class' => 'tablist');
+            $this->content->text = html_writer::tag('div',
+                                    html_Writer::tag('ul', $this->content->tabs, ['class' => 'nav nav-tabs']) .
+                                    html_writer::div($this->content->panes, 'tab-content'), $atts);
         }
 
         $output = $PAGE->get_renderer('block_filtered_course_list');
@@ -159,6 +162,7 @@ class block_filtered_course_list extends block_base {
             'usertype'           => $this->usertype,
             'liststyle'          => $this->liststyle,
             'hideallcourseslink' => $this->fclconfig->hideallcourseslink,
+            'key'                => true
         );
         $footer = new \block_filtered_course_list\output\footer($params);
         $this->content->footer = $output->render($footer);
@@ -259,12 +263,25 @@ class block_filtered_course_list extends block_base {
                 $this->rubrics[] = $otherrubric;
             }
         }
-
         $htmls = array_map(function($key, $rubric) {
             return $this->_get_rubric_html($rubric, $key);
         }, array_keys($this->rubrics), $this->rubrics);
+        error_log(print_r($htmls, true));
+        // $htmls = array_map(function($key, $rubric) {
+        //     return $this->_get_rubric_html($rubric, $key);
+        // }, array_keys($this->rubrics), $this->rubrics);
 
-        $this->content->text = implode($htmls);
+        //$this->content->text = implode(print_r($htmls, true));
+        $tabs = [];
+        $panes = [];
+        foreach ($htmls as $html) {
+            $tabs[] = $html['tab'];
+            $panes[] = $html['pane'];
+        }
+
+        //$this->content->text = implode($tabs) . implode($panes);
+        $this->content->tabs = implode($tabs);
+        $this->content->panes = implode($panes);
     }
 
     /**
@@ -320,29 +337,43 @@ class block_filtered_course_list extends block_base {
         $output = $PAGE->get_renderer('block_filtered_course_list');
         $key = $arraykey + 1;
         $initialstate = $rubric->expanded;
-        $ariaexpanded = ($initialstate == 'expanded') ? 'true' : 'false';
-        $ariahidden = ($initialstate == 'expanded') ? 'false' : 'true';
-        $atts = array(
-            'id'            => "fcl_{$this->instance->id}_tab{$key}",
-            'class'         => "course-section tab{$key} $initialstate",
-            'role'          => 'tab',
-            'aria-controls' => "fcl_{$this->instance->id}_tabpanel{$key}",
-            'aria-expanded' => "$ariaexpanded",
-            'aria-selected' => 'false',
-        );
-        $title = html_writer::tag('div', htmlentities($rubric->title), $atts);
+        $active = ($initialstate == 'expanded') ? 'active' : '';
+        // $ariaexpanded = ($initialstate == 'expanded') ? 'true' : 'false';
+        // $ariahidden = ($initialstate == 'expanded') ? 'false' : 'true';
+        // $atts = array(
+        //     'id'            => "fcl_{$this->instance->id}_tab{$key}",
+        //     'class'         => "course-section tab{$key} {$active} nav-item",
+        //     'role'          => 'tab',
+        //     'aria-controls' => "fcl_{$this->instance->id}_tabpanel{$key}",
+        //     // 'aria-expanded' => "$ariaexpanded",
+        //     // 'aria-selected' => 'false',
+        // );
+        $liatts = [
+            'class'         => "course-section tab{$key} nav-item"
+        ];
+        $aatts = [
+            'class'         => "nav-link {$active}",
+            'role'          => "tab",
+            'data-toggle'   => "tab",
+            'href'          => "#fcl_{$this->instance->id}_tabpanel{$key}"
+        ];
+        $tab = html_writer::tag('li',
+                    html_writer::tag('a', htmlentities($rubric->title), $aatts),
+                    $liatts);
+
         $courselinks = array_map(function($course) use ($output) {
             $courselink = new \block_filtered_course_list\output\course_link_list_item($course);
             return $output->render($courselink);
         }, $rubric->courses);
         $ulatts = array(
             'id'              => "fcl_{$this->instance->id}_tabpanel{$key}",
-            'class'           => "collapsible list tabpanel{$key}",
+            'class'           => "tabpanel{$key} tab-pane {$active} list-unstyled card",
             'role'            => "tabpanel",
             'aria-labelledby' => "fcl_{$this->instance->id}_tab{$key}",
-            'aria-hidden'     => "$ariahidden",
+            //'aria-hidden'     => "$ariahidden",
         );
+        //$ul = html_writer::div(html_writer::tag('ul', implode($courselinks), $ulatts), 'card');
         $ul = html_writer::tag('ul', implode($courselinks), $ulatts);
-        return $title . $ul;
+        return array('tab' => $tab, 'pane' => $ul);
     }
 }

@@ -31,6 +31,7 @@
     * linkclasses - string: CSS classes for the list item link.
     * title - string: Text to display when the list item link is hovered.
     * url - string: URL to a course, category, etc.
+    * status - string: Class for showing the appropriate course status
 
     Example context (json):
     {
@@ -38,9 +39,10 @@
         "displaytext": "Link to a course, category, etc.",
         "linkclasses": "block_filtered_course_list_list_item_link",
         "title": "Text to display on hover",
-        "url": "/course/index.php"
+        "url": "/course/index.php",
+        "status": "astrisk red"
     }
 }}
 <li class='{{ classes }}'>
-    <a href='{{ url }}' {{#title}} title='{{ title }}' {{/title}} class='{{ linkclasses }}'>{{ displaytext }}</a>
+    {{#status}} <i class="fa fa-{{status}}"></i>{{/status}} <a href='{{ url }}' {{#title}} title='{{ title }}' {{/title}} class='{{ linkclasses }}'>{{ displaytext }}</a>
 </li>

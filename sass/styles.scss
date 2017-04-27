@@ -1,0 +1,19 @@
+.block_filtered_course_list {
+    .dimmed {
+        color: #999;
+    }
+    .danger {
+        color: #b94a48;
+    }
+    .tab-content {
+        .tab-pane {
+            padding-top: 10px;
+        }
+        li {
+            padding: 0 0 10px 31px;
+            i {
+                margin-left: -16px;
+            }
+        }
+    }
+}

@@ -47,6 +47,10 @@ abstract class list_item implements \renderable, \templatable {
     public $title;
     /** @var string Link to the Course index page */
     public $url;
+    /** @var string Course status for current user */
+    public $status;
+    /** @var string Status message */
+    public $statusmessage = '';
 
     /**
      * An abstract constructor
@@ -69,6 +73,8 @@ abstract class list_item implements \renderable, \templatable {
             'linkclasses' => implode(' ', $this->linkclasses),
             'title'       => $this->title,
             'url'         => $this->url,
+            'status'      => $this->status,
+            'statusmessage' => $this->statusmessage
         );
         return $data;
     }
@@ -82,7 +88,6 @@ abstract class list_item implements \renderable, \templatable {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_link_list_item extends list_item implements \templatable, \renderable {
-
     /**
      * Constructor
      * Defines class properties for course link list items.
@@ -90,13 +95,26 @@ class course_link_list_item extends list_item implements \templatable, \renderab
      * @param \stdClass $course A moodle course object
      */
     public function __construct($course) {
+        global $USER;
         $this->classes[] = 'fcl-course-link';
-        $this->displaytext = format_string($course->fullname);
+        $this->displaytext = get_course_display_name_for_list($course);
         if (!$course->visible) {
             $this->linkclasses[] = 'dimmed';
         }
         $this->title = format_string($course->shortname);
         $this->url = new \moodle_url('/course/view.php?id=' . $course->id);
+
+        if (isset($USER->lastcourseaccess[$course->id])) {
+            if (strtotime($course->timemodified) > $USER->lastcourseaccess[$course->id]) {
+                if (!isset($USER->currentcourseaccess[$course->id])) {
+                    $this->status = 'star green';
+                    $this->statusmessage = get_string('updatedcourse', 'block_filtered_course_list');
+                }
+            }
+        } elseif (!isset($USER->currentcourseaccess[$course->id])) {
+            $this->status = 'asterisk danger';
+            $this->statusmessage = get_string('newcourse', 'block_filtered_course_list');
+        }
     }
 }
 
@@ -141,6 +159,8 @@ class footer implements \renderable, \templatable {
     public $url;
     /** @var boolean Whether or not to display the link */
     public $visible = false;
+    /** @var bool Show key */
+    public $key = true;
 
     /**
      * Constructor
@@ -175,6 +195,7 @@ class footer implements \renderable, \templatable {
             'linktext' => $this->linktext,
             'url'      => $this->url,
             'visible'  => $this->visible,
+            'key'      => $this->key
         );
         return $data;
     }

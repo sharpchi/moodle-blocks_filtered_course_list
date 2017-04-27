@@ -77,3 +77,5 @@ $string['primaryvector']            = 'Primary sort vector';
 $string['secondarysort']            = 'Secondary sort';
 $string['secondaryvector']          = 'Secondary sort vector';
 $string['top']                      = 'Top';
+$string['newcourse']                = 'You have never viewed this module.';
+$string['updatedcourse']            = 'This module has been updated since your last visit.';

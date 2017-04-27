@@ -42,3 +42,14 @@
         <a href='{{ url }}'>{{ linktext }} …</a>
     </div>
 {{/ visible }}
+{{#key}}
+    <div class="bold">Key</div>
+    <ul class="list-unstyled unstyled">
+        <li>
+            <i class="fa fa-star green"></i> {{#str}}updatedcourse, block_filtered_course_list{{/str}}
+        </li>
+        <li>
+            <i class="fa fa-asterisk danger"></i> {{#str}}newcourse, block_filtered_course_list{{/str}}
+        </li>
+    </ul>
+{{/key}}
