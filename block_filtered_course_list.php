@@ -266,12 +266,7 @@ class block_filtered_course_list extends block_base {
         $htmls = array_map(function($key, $rubric) {
             return $this->_get_rubric_html($rubric, $key);
         }, array_keys($this->rubrics), $this->rubrics);
-        error_log(print_r($htmls, true));
-        // $htmls = array_map(function($key, $rubric) {
-        //     return $this->_get_rubric_html($rubric, $key);
-        // }, array_keys($this->rubrics), $this->rubrics);
 
-        //$this->content->text = implode(print_r($htmls, true));
         $tabs = [];
         $panes = [];
         foreach ($htmls as $html) {
@@ -279,7 +274,6 @@ class block_filtered_course_list extends block_base {
             $panes[] = $html['pane'];
         }
 
-        //$this->content->text = implode($tabs) . implode($panes);
         $this->content->tabs = implode($tabs);
         $this->content->panes = implode($panes);
     }
@@ -338,16 +332,6 @@ class block_filtered_course_list extends block_base {
         $key = $arraykey + 1;
         $initialstate = $rubric->expanded;
         $active = ($initialstate == 'expanded') ? 'active' : '';
-        // $ariaexpanded = ($initialstate == 'expanded') ? 'true' : 'false';
-        // $ariahidden = ($initialstate == 'expanded') ? 'false' : 'true';
-        // $atts = array(
-        //     'id'            => "fcl_{$this->instance->id}_tab{$key}",
-        //     'class'         => "course-section tab{$key} {$active} nav-item",
-        //     'role'          => 'tab',
-        //     'aria-controls' => "fcl_{$this->instance->id}_tabpanel{$key}",
-        //     // 'aria-expanded' => "$ariaexpanded",
-        //     // 'aria-selected' => 'false',
-        // );
         $liatts = [
             'class'         => "course-section tab{$key} nav-item"
         ];
@@ -370,9 +354,8 @@ class block_filtered_course_list extends block_base {
             'class'           => "tabpanel{$key} tab-pane {$active} list-unstyled card",
             'role'            => "tabpanel",
             'aria-labelledby' => "fcl_{$this->instance->id}_tab{$key}",
-            //'aria-hidden'     => "$ariahidden",
+
         );
-        //$ul = html_writer::div(html_writer::tag('ul', implode($courselinks), $ulatts), 'card');
         $ul = html_writer::tag('ul', implode($courselinks), $ulatts);
         return array('tab' => $tab, 'pane' => $ul);
     }
