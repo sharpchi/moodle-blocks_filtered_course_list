@@ -152,6 +152,7 @@ class block_filtered_course_list extends block_base {
 
         if (is_object($this->content)) {
             $atts = array('role' => 'tablist', 'aria-multiselectable' => 'false', 'class' => 'tablist');
+            // TODO: Check if $this->content->tabs or $this->content->panes are empty
             $this->content->text = html_writer::tag('div',
                                     html_Writer::tag('ul', $this->content->tabs, ['class' => 'nav nav-tabs']) .
                                     html_writer::div($this->content->panes, 'tab-content'), $atts);
