@@ -15,17 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains version information for the Filtered course list block.
+ * Privacy Subsystem implementation for block_filtered_course_list.
  *
  * @package    block_filtered_course_list
- * @copyright  2016 CLAMP
+ * @copyright  2018 Mark Sharp <m.sharp@chi.ac.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_filtered_course_list\privacy;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2018041700;
-$plugin->requires  = 2017111302; // Requires Moodle 3.4.2.
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v3.2.4';
-$plugin->component = 'block_filtered_course_list';
+/**
+ * Privacy Subsystem for block_filtered_course_list implementing null_provider.
+ *
+ * @copyright  2018 Mark Sharp <m.sharp@chi.ac.uk>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason() : string {
+        return 'privacy:metadata';
+    }
+}

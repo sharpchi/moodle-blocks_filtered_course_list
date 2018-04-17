@@ -79,3 +79,6 @@ $string['secondaryvector']          = 'Secondary sort vector';
 $string['top']                      = 'Top';
 $string['newcourse']                = 'You have never viewed this module.';
 $string['updatedcourse']            = 'This module has been updated since your last visit.';
+
+/* Privacy */
+$string['privacy:metadata'] = 'The filtered course list plugin does not store any personal data.';
